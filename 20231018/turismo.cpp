@@ -41,9 +41,16 @@ class Evento{
     protected:
         int duracao;
 
+        public:
         Evento(int _duracao){
             this->duracao = _duracao;
         }
+
+        virtual void imprimir(){
+            cout << "Aqui vai a descricao de um evento" << endl;
+        }
+
+        
 };
 
 class Roteiro : public Evento{
@@ -53,6 +60,13 @@ class Roteiro : public Evento{
         Roteiro(int _duracao, string _titulo, int _ordem):Evento(_duracao){
             this->titulo = _titulo;
             this->ordem = _ordem;
+        }
+
+        virtual void imprimir() override{
+            cout << "------ ROTEIRO -----" << endl;
+            cout << "Titulo: " << this->titulo<< endl;
+            cout << "Ordem: " << this->ordem<< endl;
+            cout << "Duracao: " << this->duracao<< endl;
         }
 
 };
@@ -66,6 +80,13 @@ class Deslocamento : public Evento{
             this->destino = _destino;
         }
 
+        virtual void imprimir() override{
+            cout << "------ DESLOCAMENTO -----" << endl;
+            cout << "Origem: " << this->origem << endl;
+            cout << "Destino: " << this->destino << endl;
+            cout << "Duracao: " << this->duracao<< endl;
+        }
+
 };
 
 class Pernoite : public Evento{
@@ -74,13 +95,20 @@ class Pernoite : public Evento{
         Pernoite(int _duracao,string _local=""):Evento(_duracao){
             this->local = _local;
         }
+
+        virtual void imprimir() override{
+            cout << "------ PERNOITE -----" << endl;
+            cout << "Local: " << this->local<< endl;
+            cout << "Duracao: " << this->duracao<< endl;
+        }
 };
 
 class Pacote{
     private:
+    public:
         vector<Evento*> listaEventos;
     
-    public:
+
         Pacote(Evento *_evento){
             listaEventos.push_back(_evento);
         }
@@ -88,6 +116,12 @@ class Pacote{
         void inserirEvento(Evento *_evento){
             listaEventos.push_back(_evento);
         }
+
+        
+        vector<Evento*> getListaEventos(){
+            return listaEventos;
+        }
+
         //todo: métodos para acessar (inserir, listar) eventos
 };
 
@@ -100,6 +134,9 @@ class Reserva{
             this->pacote = _pacote;
         }
 };
+
+
+
 
 int main(){
     
@@ -119,13 +156,19 @@ int main(){
 
     Deslocamento *d1 = new Deslocamento(1,"Hotel","Noite Parque do Povo");
 
-    Pernoite *p1 = new Pernoite(10);
+    Pernoite *p1 = new Pernoite(10, "Ilheus-Ba");
 
     Pacote *bronze = new Pacote(r1); //polimorfismo
     bronze->inserirEvento(d1);
     bronze->inserirEvento(p1);
 
     Reserva *reserva01 = new Reserva(cli01,bronze);
+
+    for(auto el : bronze->listaEventos){
+         //cout << endl;
+         el->imprimir();
+    }
+    //Referente a PI 24
     
     return 0;
 }
